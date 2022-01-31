@@ -1,0 +1,29 @@
+<div fxLayout="row" fxLayoutAlign="space-between flex-start">
+  <h1>Products</h1>
+  <a routerLink="/products/new" mat-button>NEW PRODUCT</a>
+</div>
+
+<div fxLayout="row wrap" fxLayoutGap="16px grid">
+  <div
+    fxFlex.xs="100%"
+    fxFlex.sm="50%"
+    fxFlex.lt-lg="33%"
+    fxFlex="25%"
+    *ngFor="let product of products"
+  >
+    <mat-card>
+      <mat-card-title>{{ product.title }}</mat-card-title>
+      <mat-card-content>
+        <p>Price: <strong>{{ product.price }} KGS</strong></p>
+        <p>{{ product.description }}</p>
+      </mat-card-content>
+      <mat-divider></mat-divider>
+      <mat-card-actions>
+        <a
+          [routerLink]="['/products/', product.id]"
+          mat-button
+        >VIEW</a>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
