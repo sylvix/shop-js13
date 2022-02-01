@@ -16,10 +16,11 @@ export class ProductsService {
       map(response => {
         return response.map(productData => {
           return new Product(
+            productData.id,
             productData.title,
             productData.price,
             productData.description,
-            productData.id
+            productData.image,
           );
         });
       })
@@ -27,6 +28,15 @@ export class ProductsService {
   }
 
   createProduct(productData: ProductData) {
-    return this.http.post(environment.apiUrl + '/products', productData);
+    const formData = new FormData();
+    formData.append('title', productData.title);
+    formData.append('price', productData.price.toString());
+    formData.append('description', productData.description);
+
+    if (productData.image) {
+      formData.append('image', productData.image);
+    }
+
+    return this.http.post(environment.apiUrl + '/products', formData);
   }
 }

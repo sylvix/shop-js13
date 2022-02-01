@@ -19,13 +19,17 @@ import { MatCardModule } from '@angular/material/card';
 import { EditProductComponent } from './pages/edit-product/edit-product.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { FileInputComponent } from './ui/file-input/file-input.component';
+import { ImagePipe } from './pipes/image.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     LayoutComponent,
     ProductsComponent,
-    EditProductComponent
+    EditProductComponent,
+    FileInputComponent,
+    ImagePipe,
   ],
   imports: [
     BrowserModule,
