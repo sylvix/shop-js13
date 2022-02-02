@@ -19,7 +19,18 @@ const storage = multer.diskStorage({
 const upload = multer({storage});
 
 router.get('/', (req, res) => {
-  const products = db.getItems();
+  console.log(req.query);
+
+  let products = [...db.getItems()];
+
+  if (req.query.orderBy === 'date' && req.query.direction === 'desc') {
+    products.reverse();
+  }
+
+  if (req.query.filter === 'image') {
+    products = products.filter(p => Boolean(p.image));
+  }
+
   return res.send(products);
 });
 
@@ -41,7 +52,7 @@ router.post('/', upload.single('image'), async (req, res, next) => {
 
     const product = {
       title: req.body.title,
-      price: req.body.price,
+      price: parseFloat(req.body.price),
       description: req.body.description,
     };
 

@@ -9,6 +9,7 @@ export class Product {
 }
 
 export interface ProductData {
+  [key: string]: any;
   title: string;
   price: number;
   description: string;

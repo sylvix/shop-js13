@@ -24,18 +24,17 @@ export class ProductsService {
           );
         });
       })
-    )
+    );
   }
 
   createProduct(productData: ProductData) {
     const formData = new FormData();
-    formData.append('title', productData.title);
-    formData.append('price', productData.price.toString());
-    formData.append('description', productData.description);
 
-    if (productData.image) {
-      formData.append('image', productData.image);
-    }
+    Object.keys(productData).forEach(key => {
+      if (productData[key] !== null) {
+        formData.append(key, productData[key]);
+      }
+    });
 
     return this.http.post(environment.apiUrl + '/products', formData);
   }
