@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const db = require('./fileDb');
+const db = require('./mySqlDb');
 const products = require('./app/products');
 const app = express();
 

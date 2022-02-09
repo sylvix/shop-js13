@@ -3,7 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const { nanoid } = require('nanoid');
 const config = require('../config');
-const db = require('../fileDb');
+const db = require('../mySqlDb');
 
 const router = express.Router();
 
@@ -18,30 +18,40 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage});
 
-router.get('/', (req, res) => {
-  console.log(req.query);
+router.get('/', async (req, res, next) => {
+  try {
+    let query = 'SELECT * FROM products';
 
-  let products = [...db.getItems()];
+    if (req.query.filter === 'image') {
+      query += ' WHERE image IS NOT NULL';
+    }
 
-  if (req.query.orderBy === 'date' && req.query.direction === 'desc') {
-    products.reverse();
+    if (req.query.orderBy === 'date' && req.query.direction === 'desc') {
+      query += ' ORDER BY id DESC';
+    }
+
+    let [products] = await db.getConnection().execute(query);
+
+    return res.send(products);
+  } catch (e) {
+    next(e);
   }
-
-  if (req.query.filter === 'image') {
-    products = products.filter(p => Boolean(p.image));
-  }
-
-  return res.send(products);
 });
 
-router.get('/:id', (req, res) => {
-  const product = db.getItem(req.params.id);
+router.get('/:id', async (req, res, next) => {
+  try {
+    const [products] = await db.getConnection().execute('SELECT * FROM products WHERE id = ?', [req.params.id]);
 
-  if (!product) {
-    return res.status(404).send({message: 'Not found'});
+    const product = products[0];
+
+    if (!product) {
+      return res.status(404).send({message: 'Not found'});
+    }
+
+    return res.send(product);
+  } catch (e) {
+    next(e);
   }
-
-  return res.send(product);
 });
 
 router.post('/', upload.single('image'), async (req, res, next) => {
@@ -54,15 +64,25 @@ router.post('/', upload.single('image'), async (req, res, next) => {
       title: req.body.title,
       price: parseFloat(req.body.price),
       description: req.body.description,
+      image: null,
     };
 
     if (req.file) {
       product.image = req.file.filename;
     }
 
-    await db.addItem(product);
+    let query = 'INSERT INTO products (title, price, description, image) VALUES (?, ?, ?, ?)';
 
-    return res.send({message: 'Created new product', id: product.id});
+    const [results] = await db.getConnection().execute(query, [
+      product.title,
+      product.price,
+      product.description,
+      product.image
+    ]);
+
+    const id = results.insertId;
+
+    return res.send({message: 'Created new product', id});
   } catch (e) {
     next(e);
   }
