@@ -3,7 +3,8 @@ const multer = require('multer');
 const path = require('path');
 const { nanoid } = require('nanoid');
 const config = require('../config');
-const db = require('../mySqlDb');
+const db = require('../mongoDb');
+const {ObjectId} = require("mongodb");
 
 const router = express.Router();
 
@@ -20,17 +21,22 @@ const upload = multer({storage});
 
 router.get('/', async (req, res, next) => {
   try {
-    let query = 'SELECT * FROM products';
+    const query = {};
+    const sort = {};
 
     if (req.query.filter === 'image') {
-      query += ' WHERE image IS NOT NULL';
+      query.image = {$ne: null};
     }
 
     if (req.query.orderBy === 'date' && req.query.direction === 'desc') {
-      query += ' ORDER BY id DESC';
+      sort._id = -1;
     }
 
-    let [products] = await db.getConnection().execute(query);
+    const products = await db.getDb()
+      .collection('products')
+      .find(query)
+      .sort(sort)
+      .toArray();
 
     return res.send(products);
   } catch (e) {
@@ -40,9 +46,9 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:id', async (req, res, next) => {
   try {
-    const [products] = await db.getConnection().execute('SELECT * FROM products WHERE id = ?', [req.params.id]);
-
-    const product = products[0];
+    const product = await db.getDb()
+      .collection('products')
+      .findOne({_id: new ObjectId(req.params.id)});
 
     if (!product) {
       return res.status(404).send({message: 'Not found'});
@@ -71,16 +77,9 @@ router.post('/', upload.single('image'), async (req, res, next) => {
       product.image = req.file.filename;
     }
 
-    let query = 'INSERT INTO products (title, price, description, image) VALUES (?, ?, ?, ?)';
+    const results = await db.getDb().collection('products').insertOne(product);
 
-    const [results] = await db.getConnection().execute(query, [
-      product.title,
-      product.price,
-      product.description,
-      product.image
-    ]);
-
-    const id = results.insertId;
+    const id = results.insertedId;
 
     return res.send({message: 'Created new product', id});
   } catch (e) {

@@ -28,7 +28,7 @@ values  (3, 'HDDs'),
         (6, 'Monitors'),
         (7, 'CPUs');
 
-insert into products.products (id, title, description, price, image, category_id, qty)
+insert into products (id, title, description, price, image, category_id, qty)
 values  (1, 'Intel Core i7 10700 KF', 'Some kinda description', 500, 'w_yK0VUTqvn_RjsavWEKs.jpg', 7, 5),
         (2, 'NVIDIA GeForce RTX 3070', 'GPU description, etc.', 900, 'MA4VzUwITRNH5MqGrP-ac.jpg', null, 5),
         (3, 'Seagate Barracuda 4TB', 'Something', 120, null, null, 3),
