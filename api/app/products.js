@@ -3,8 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const { nanoid } = require('nanoid');
 const config = require('../config');
-const db = require('../mongoDb');
-const {ObjectId} = require("mongodb");
+const Product = require("../models/Product");
 
 const router = express.Router();
 
@@ -32,11 +31,7 @@ router.get('/', async (req, res, next) => {
       sort._id = -1;
     }
 
-    const products = await db.getDb()
-      .collection('products')
-      .find(query)
-      .sort(sort)
-      .toArray();
+    const products = await Product.find(query).sort(sort);
 
     return res.send(products);
   } catch (e) {
@@ -46,9 +41,7 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:id', async (req, res, next) => {
   try {
-    const product = await db.getDb()
-      .collection('products')
-      .findOne({_id: new ObjectId(req.params.id)});
+    const product = await Product.findById(req.params.id);
 
     if (!product) {
       return res.status(404).send({message: 'Not found'});
@@ -66,7 +59,7 @@ router.post('/', upload.single('image'), async (req, res, next) => {
       return res.status(400).send({message: 'Title and price are required'});
     }
 
-    const product = {
+    const productData = {
       title: req.body.title,
       price: parseFloat(req.body.price),
       description: req.body.description,
@@ -74,14 +67,14 @@ router.post('/', upload.single('image'), async (req, res, next) => {
     };
 
     if (req.file) {
-      product.image = req.file.filename;
+      productData.image = req.file.filename;
     }
 
-    const results = await db.getDb().collection('products').insertOne(product);
+    const product = new Product(productData);
 
-    const id = results.insertedId;
+    await product.save();
 
-    return res.send({message: 'Created new product', id});
+    return res.send({message: 'Created new product', id: product._id});
   } catch (e) {
     next(e);
   }
