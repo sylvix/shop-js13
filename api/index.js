@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require("mongoose");
 const products = require('./app/products');
+const categories = require('./app/categories');
 const config = require('./config');
 const app = express();
 
@@ -11,6 +12,7 @@ app.use(cors({origin: 'http://localhost:4200'}));
 app.use(express.json());
 app.use(express.static('public'));
 app.use('/products', products);
+app.use('/categories', categories);
 
 const run = async () => {
   await mongoose.connect(config.mongo.db, config.mongo.options);

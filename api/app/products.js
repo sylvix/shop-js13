@@ -31,7 +31,7 @@ router.get('/', async (req, res, next) => {
       sort._id = -1;
     }
 
-    const products = await Product.find(query).sort(sort);
+    const products = await Product.find(query).sort(sort).populate("category", "title");
 
     return res.send(products);
   } catch (e) {
@@ -60,6 +60,7 @@ router.post('/', upload.single('image'), async (req, res, next) => {
     }
 
     const productData = {
+      category: req.body.category,
       title: req.body.title,
       price: parseFloat(req.body.price),
       description: req.body.description,

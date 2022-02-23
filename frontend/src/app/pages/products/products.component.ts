@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Product } from '../../models/product.model';
-import { ProductsService } from '../../services/products.service';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../store/types';
+import { Observable } from 'rxjs';
+import { fetchProductsRequest } from '../../store/products.actions';
 
 @Component({
   selector: 'app-products',
@@ -8,20 +11,18 @@ import { ProductsService } from '../../services/products.service';
   styleUrls: ['./products.component.sass']
 })
 export class ProductsComponent implements OnInit {
-  products: Product[] = [];
+  products: Observable<Product[]>
+  loading: Observable<boolean>
+  error: Observable<null | string>
 
-  constructor(private productsService: ProductsService) { }
+  constructor(private store: Store<AppState>) {
+    this.products = store.select(state => state.products.products);
+    this.loading = store.select(state => state.products.fetchLoading);
+    this.error = store.select(state => state.products.fetchError);
+  }
 
   ngOnInit(): void {
-    this.productsService.getProducts().subscribe({
-      next: products => {
-        this.products = products;
-        console.log(this.products);
-      },
-      error: error => {
-        console.error('something');
-      }
-    });
+    this.store.dispatch(fetchProductsRequest());
   }
 
 }

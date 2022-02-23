@@ -21,6 +21,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FileInputComponent } from './ui/file-input/file-input.component';
 import { ImagePipe } from './pipes/image.pipe';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { productsReducer } from './store/products.reducer';
+import { ProductsEffects } from './store/products.effects';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -47,6 +52,11 @@ import { ImagePipe } from './pipes/image.pipe';
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
+    StoreModule.forRoot({
+      products: productsReducer
+    }, {}),
+    EffectsModule.forRoot([ProductsEffects]),
+    MatProgressSpinnerModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

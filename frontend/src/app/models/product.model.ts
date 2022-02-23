@@ -15,3 +15,11 @@ export interface ProductData {
   description: string;
   image: File | null;
 }
+
+export interface ApiProductData {
+  _id: string,
+  title: string,
+  price: number,
+  description: string,
+  image: string
+}
