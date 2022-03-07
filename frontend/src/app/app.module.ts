@@ -26,6 +26,10 @@ import { EffectsModule } from '@ngrx/effects';
 import { productsReducer } from './store/products.reducer';
 import { ProductsEffects } from './store/products.effects';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { RegisterComponent } from './pages/register/register.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { usersReducer } from './store/users.reducer';
+import { UsersEffects } from './store/users.effects';
 
 @NgModule({
   declarations: [
@@ -35,6 +39,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     EditProductComponent,
     FileInputComponent,
     ImagePipe,
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,
@@ -53,10 +58,12 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatFormFieldModule,
     MatInputModule,
     StoreModule.forRoot({
-      products: productsReducer
+      products: productsReducer,
+      users: usersReducer
     }, {}),
-    EffectsModule.forRoot([ProductsEffects]),
+    EffectsModule.forRoot([ProductsEffects, UsersEffects]),
     MatProgressSpinnerModule,
+    MatSnackBarModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
