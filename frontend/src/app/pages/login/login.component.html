@@ -1,10 +1,13 @@
-<app-centered-card title="Register">
+<app-centered-card title="Sign in">
   <form
     #f="ngForm"
     fxLayout="column"
     autocomplete="off"
     (ngSubmit)="onSubmit()"
   >
+    <div *ngIf="error | async" class="error">
+      {{ (error | async)?.error }}
+    </div>
     <mat-form-field appearance="outline">
       <mat-label>Email</mat-label>
       <input
@@ -17,15 +20,12 @@
       <mat-error *ngIf="email.touched && email.hasError('email')">
         Enter correct email!
       </mat-error>
-      <mat-error *ngIf="email.touched && email.hasError('serverError')">
-        {{ email.getError('serverError') }}
-      </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Password</mat-label>
       <input
-        type="password" name="password" autocomplete="new-password"
+        type="password" name="password" autocomplete="current-password"
         required matInput ngModel #password="ngModel"
       />
       <mat-error *ngIf="password.touched && password.hasError('required')">
@@ -33,13 +33,17 @@
       </mat-error>
     </mat-form-field>
 
+    <div fxLayout="row" fxLayoutAlign="center" style="margin-bottom: 16px">
+      <a routerLink="/register">Don't have an account? Sign Up</a>
+    </div>
+
     <button
       type="submit"
       mat-raised-button
       color="primary"
       [disabled]="f.invalid"
     >
-      REGISTER
+      SIGN IN
     </button>
   </form>
 </app-centered-card>

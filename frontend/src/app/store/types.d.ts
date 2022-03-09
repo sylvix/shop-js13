@@ -1,5 +1,5 @@
 import { Product } from '../models/product.model';
-import { RegisterError, User } from '../models/user.model';
+import { LoginError, RegisterError, User } from '../models/user.model';
 
 export type ProductsState = {
   products: Product[],
@@ -12,7 +12,9 @@ export type ProductsState = {
 export type UsersState = {
   user: null | User,
   registerLoading: boolean,
-  registerError: null | RegisterError
+  registerError: null | RegisterError,
+  loginLoading: boolean,
+  loginError: null | LoginError,
 }
 
 export type AppState = {

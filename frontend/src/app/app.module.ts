@@ -21,7 +21,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FileInputComponent } from './ui/file-input/file-input.component';
 import { ImagePipe } from './pipes/image.pipe';
-import { StoreModule } from '@ngrx/store';
+import { ActionReducer, MetaReducer, StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { productsReducer } from './store/products.reducer';
 import { ProductsEffects } from './store/products.effects';
@@ -30,6 +30,19 @@ import { RegisterComponent } from './pages/register/register.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { usersReducer } from './store/users.reducer';
 import { UsersEffects } from './store/users.effects';
+import { LoginComponent } from './pages/login/login.component';
+import { CenteredCardComponent } from './ui/centered-card/centered-card.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { localStorageSync } from 'ngrx-store-localstorage';
+
+const localStorageSyncReducer = (reducer: ActionReducer<any>) => {
+  return localStorageSync({
+    keys: [{users: ['user']}],
+    rehydrate: true
+  })(reducer);
+}
+
+const metaReducers: MetaReducer[] = [localStorageSyncReducer];
 
 @NgModule({
   declarations: [
@@ -40,6 +53,8 @@ import { UsersEffects } from './store/users.effects';
     FileInputComponent,
     ImagePipe,
     RegisterComponent,
+    LoginComponent,
+    CenteredCardComponent,
   ],
   imports: [
     BrowserModule,
@@ -60,12 +75,14 @@ import { UsersEffects } from './store/users.effects';
     StoreModule.forRoot({
       products: productsReducer,
       users: usersReducer
-    }, {}),
+    }, {metaReducers}),
     EffectsModule.forRoot([ProductsEffects, UsersEffects]),
     MatProgressSpinnerModule,
     MatSnackBarModule,
+    MatMenuModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
