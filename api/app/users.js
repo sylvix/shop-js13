@@ -22,22 +22,26 @@ router.post('/', async (req, res, next) => {
 });
 
 router.post('/sessions', async (req, res) => {
-  const user = await User.findOne({email: req.body.email});
+  try {
+    const user = await User.findOne({email: req.body.email});
 
-  if (!user) {
-    return res.status(400).send({error: 'Email not found'});
+    if (!user) {
+      return res.status(400).send({error: 'Email not found'});
+    }
+
+    const isMatch = await user.checkPassword(req.body.password);
+
+    if (!isMatch) {
+      return res.status(400).send({error: 'Password is wrong'});
+    }
+
+    user.generateToken();
+    await user.save();
+
+    return res.send(user);
+  } catch (e) {
+    next(e);
   }
-
-  const isMatch = await user.checkPassword(req.body.password);
-
-  if (!isMatch) {
-    return res.status(400).send({error: 'Password is wrong'});
-  }
-
-  user.generateToken();
-  await user.save();
-
-  return res.send(user);
 });
 
 router.get('/secret', auth, async (req, res, next) => {
@@ -46,6 +50,26 @@ router.get('/secret', auth, async (req, res, next) => {
   } catch (e) {
     next(e);
   }
-})
+});
+
+router.delete('/sessions', async (req, res, next) => {
+  try {
+    const token = req.get('Authorization');
+    const message = {message: 'OK'};
+
+    if (!token) return res.send(message);
+
+    const user = await User.findOne({token});
+
+    if (!user) return res.send(message);
+
+    user.generateToken();
+    await user.save();
+
+    return res.send(message);
+  } catch (e) {
+    next(e);
+  }
+});
 
 module.exports = router;

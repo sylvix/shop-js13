@@ -25,3 +25,5 @@ export const loginUserFailure = createAction(
   '[Users] Login Failure',
   props<{error: null | LoginError}>()
 );
+export const logoutUser = createAction('[Users] Logout');
+export const logoutUserRequest = createAction('[Users] Server Logout Request');
