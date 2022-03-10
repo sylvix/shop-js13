@@ -1,9 +1,12 @@
+const path = require('path');
+const fs = require("fs").promises;
 const express = require('express');
 const multer = require('multer');
-const path = require('path');
 const { nanoid } = require('nanoid');
 const config = require('../config');
 const Product = require("../models/Product");
+const mongoose = require("mongoose");
+
 
 const router = express.Router();
 
@@ -77,6 +80,14 @@ router.post('/', upload.single('image'), async (req, res, next) => {
 
     return res.send({message: 'Created new product', id: product._id});
   } catch (e) {
+    if (e instanceof mongoose.Error.ValidationError) {
+      if (req.file) {
+        await fs.unlink(req.file.path);
+      }
+
+      return res.status(400).send(e);
+    }
+
     next(e);
   }
 });
