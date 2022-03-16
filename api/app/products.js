@@ -6,6 +6,8 @@ const { nanoid } = require('nanoid');
 const config = require('../config');
 const Product = require("../models/Product");
 const mongoose = require("mongoose");
+const auth = require("../middleware/auth");
+const permit = require("../middleware/permit");
 
 
 const router = express.Router();
@@ -56,7 +58,7 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.post('/', upload.single('image'), async (req, res, next) => {
+router.post('/', auth, permit('admin'), upload.single('image'), async (req, res, next) => {
   try {
     if (!req.body.title || !req.body.price) {
       return res.status(400).send({message: 'Title and price are required'});

@@ -21,28 +21,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FileInputComponent } from './ui/file-input/file-input.component';
 import { ImagePipe } from './pipes/image.pipe';
-import { ActionReducer, MetaReducer, StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
-import { productsReducer } from './store/products.reducer';
-import { ProductsEffects } from './store/products.effects';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RegisterComponent } from './pages/register/register.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { usersReducer } from './store/users.reducer';
-import { UsersEffects } from './store/users.effects';
 import { LoginComponent } from './pages/login/login.component';
 import { CenteredCardComponent } from './ui/centered-card/centered-card.component';
 import { MatMenuModule } from '@angular/material/menu';
-import { localStorageSync } from 'ngrx-store-localstorage';
+import { AppStoreModule } from './app-store.module';
+import { MatSelectModule } from '@angular/material/select';
 
-const localStorageSyncReducer = (reducer: ActionReducer<any>) => {
-  return localStorageSync({
-    keys: [{users: ['user']}],
-    rehydrate: true
-  })(reducer);
-}
-
-const metaReducers: MetaReducer[] = [localStorageSyncReducer];
 
 @NgModule({
   declarations: [
@@ -58,7 +45,6 @@ const metaReducers: MetaReducer[] = [localStorageSyncReducer];
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
     HttpClientModule,
@@ -72,14 +58,12 @@ const metaReducers: MetaReducer[] = [localStorageSyncReducer];
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
-    StoreModule.forRoot({
-      products: productsReducer,
-      users: usersReducer
-    }, {metaReducers}),
-    EffectsModule.forRoot([ProductsEffects, UsersEffects]),
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatMenuModule,
+    AppRoutingModule,
+    AppStoreModule,
+    MatSelectModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

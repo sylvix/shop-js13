@@ -7,7 +7,11 @@ const router = express.Router();
 
 router.post('/', async (req, res, next) => {
   try {
-    const user = new User(req.body);
+    const user = new User({
+      email: req.body.email,
+      password: req.body.password
+    });
+
     user.generateToken();
     await user.save();
 

@@ -6,6 +6,14 @@
     </div>
     <form (ngSubmit)="onSubmit()" #f="ngForm" fxLayout="column">
       <mat-form-field appearance="outline">
+        <mat-label>Category</mat-label>
+        <mat-select name="category" required ngModel>
+          <mat-option *ngFor="let category of categories | async" [value]="category._id">
+            {{ category.title }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
         <mat-label>Title</mat-label>
         <input name="title" required matInput ngModel/>
       </mat-form-field>

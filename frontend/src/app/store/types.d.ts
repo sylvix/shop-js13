@@ -1,5 +1,6 @@
 import { Product } from '../models/product.model';
 import { LoginError, RegisterError, User } from '../models/user.model';
+import { Category } from '../models/category.model';
 
 export type ProductsState = {
   products: Product[],
@@ -17,7 +18,13 @@ export type UsersState = {
   loginError: null | LoginError,
 }
 
+export type CategoriesState = {
+  items: Category[],
+  fetchLoading: boolean,
+}
+
 export type AppState = {
   products: ProductsState,
   users: UsersState,
+  categories: CategoriesState,
 }
