@@ -51,16 +51,14 @@ export class UsersEffects {
 
   logoutUser = createEffect(() => this.actions.pipe(
     ofType(logoutUserRequest),
-    withLatestFrom(this.store.select(state => state.users.user)),
-    mergeMap(([_, user]) => {
-      if (user) {
-        return this.usersService.logout(user.token).pipe(
-          map(() => logoutUser()),
-          tap(() => this.helpers.openSnackbar('Logout successful'))
-        );
-      }
-
-      return NEVER;
+    mergeMap(() => {
+      return this.usersService.logout().pipe(
+        map(() => logoutUser()),
+        tap(() => {
+          void this.router.navigate(['/']);
+          this.helpers.openSnackbar('Logout successful');
+        })
+      );
     }))
   )
 }

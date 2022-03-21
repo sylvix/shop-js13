@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { LayoutComponent } from './ui/layout/layout.component';
 import { LayoutModule } from '@angular/cdk/layout';
@@ -29,6 +29,8 @@ import { CenteredCardComponent } from './ui/centered-card/centered-card.componen
 import { MatMenuModule } from '@angular/material/menu';
 import { AppStoreModule } from './app-store.module';
 import { MatSelectModule } from '@angular/material/select';
+import { AuthInterceptor } from './auth.interceptor';
+import { HasRolesDirective } from './directives/has-roles.directive';
 
 
 @NgModule({
@@ -42,6 +44,7 @@ import { MatSelectModule } from '@angular/material/select';
     RegisterComponent,
     LoginComponent,
     CenteredCardComponent,
+    HasRolesDirective,
   ],
   imports: [
     BrowserModule,
@@ -65,7 +68,9 @@ import { MatSelectModule } from '@angular/material/select';
     AppStoreModule,
     MatSelectModule,
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -1,6 +1,14 @@
 <div fxLayout="row" fxLayoutAlign="space-between flex-start">
   <h1>Products</h1>
-  <a routerLink="/products/new" mat-button>NEW PRODUCT</a>
+  <a
+    routerLink="/products/new"
+    mat-button
+    *appHasRoles="['admin'] else elseButton"
+  >NEW PRODUCT</a>
+
+  <ng-template #elseButton>
+    FIG VAM
+  </ng-template>
 </div>
 
 <div class="error" *ngIf="error | async">
