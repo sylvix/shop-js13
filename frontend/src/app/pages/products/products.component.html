@@ -3,12 +3,8 @@
   <a
     routerLink="/products/new"
     mat-button
-    *appHasRoles="['admin'] else elseButton"
+    *appHasRoles="['admin']"
   >NEW PRODUCT</a>
-
-  <ng-template #elseButton>
-    FIG VAM
-  </ng-template>
 </div>
 
 <div class="error" *ngIf="error | async">

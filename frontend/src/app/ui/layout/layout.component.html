@@ -27,7 +27,8 @@
         </button>
         <a routerLink="/">Shop</a>
       </div>
-      <nav *appHasRoles="['user', 'admin'] else anonMenu">
+      <!-- <ng-template> -->
+      <nav *appUserType="'user' else anonMenu">
         <button mat-icon-button [matMenuTriggerFor]="menu">
           <mat-icon>account_circle</mat-icon>
         </button>
@@ -37,6 +38,7 @@
           <button mat-menu-item (click)="logout()">Logout</button>
         </mat-menu>
       </nav>
+      <!-- </ng-template> -->
     </mat-toolbar>
     <div class="content">
       <ng-content></ng-content>

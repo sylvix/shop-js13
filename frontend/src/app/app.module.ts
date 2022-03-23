@@ -31,6 +31,7 @@ import { AppStoreModule } from './app-store.module';
 import { MatSelectModule } from '@angular/material/select';
 import { AuthInterceptor } from './auth.interceptor';
 import { HasRolesDirective } from './directives/has-roles.directive';
+import { UserTypeDirective } from './directives/user-type.directive';
 
 
 @NgModule({
@@ -45,6 +46,7 @@ import { HasRolesDirective } from './directives/has-roles.directive';
     LoginComponent,
     CenteredCardComponent,
     HasRolesDirective,
+    UserTypeDirective,
   ],
   imports: [
     BrowserModule,
