@@ -32,7 +32,20 @@ import { MatSelectModule } from '@angular/material/select';
 import { AuthInterceptor } from './auth.interceptor';
 import { HasRolesDirective } from './directives/has-roles.directive';
 import { UserTypeDirective } from './directives/user-type.directive';
+import { FacebookLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
+import { environment } from '../environments/environment';
 
+const socialConfig: SocialAuthServiceConfig = {
+  autoLogin: false,
+  providers: [
+    {
+      id: FacebookLoginProvider.PROVIDER_ID,
+      provider: new FacebookLoginProvider(environment.fbAppId, {
+        scope: 'email,public_profile'
+      })
+    }
+  ]
+}
 
 @NgModule({
   declarations: [
@@ -69,9 +82,11 @@ import { UserTypeDirective } from './directives/user-type.directive';
     AppRoutingModule,
     AppStoreModule,
     MatSelectModule,
+    SocialLoginModule,
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: 'SocialAuthServiceConfig', useValue: socialConfig },
   ],
   bootstrap: [AppComponent]
 })

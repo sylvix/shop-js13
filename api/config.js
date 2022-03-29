@@ -8,5 +8,9 @@ module.exports = {
   mongo: {
     db: 'mongodb://localhost/shop13',
     options: {useNewUrlParser: true},
+  },
+  facebook: {
+    appId: '718422199316941',
+    appSecret: 'e822dc5e22ab51742e7d8b8ec4d8b6f9'
   }
 };

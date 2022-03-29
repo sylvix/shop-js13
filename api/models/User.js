@@ -29,7 +29,9 @@ const UserSchema = new mongoose.Schema({
     required: true,
     default: 'user',
     enum: ['user', 'admin']
-  }
+  },
+  facebookId: String,
+  displayName: String,
 });
 
 const SALT_WORK_FACTOR = 10;
