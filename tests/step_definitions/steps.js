@@ -13,7 +13,6 @@ Given('я нахожусь на странице {string}', (page) => {
 
 Given('я ввожу в поля формы:', (table) => {
   table.rows.forEach(row => {
-    console.log(row.cells);
     I.fillField(row.cells[0].value, row.cells[1].value);
   });
 });
