@@ -10,6 +10,13 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class HelpersService {
   constructor(private snackbar: MatSnackBar) { }
 
+  /**
+   * This method opens snackbar with provided message. You can also pass action button text or custom config.
+   *
+   * @param message Message to display
+   * @param action Text for action button (OK by default)
+   * @param config Custom snackbar config. Default: {duration: 3000}
+   */
   openSnackbar(message: string, action?: string, config?: MatSnackBarConfig) {
     if (!config || !config.duration) {
       config = {...config, duration: 3000};

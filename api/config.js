@@ -2,11 +2,25 @@ const path = require('path');
 
 const rootPath = __dirname;
 
+let dbUrl = 'mongodb://localhost/shop13';
+let port = 8000;
+
+if (process.env.NODE_ENV === 'test') {
+  dbUrl = 'mongodb://localhost/shop13-test';
+  port = 8010;
+}
+
 module.exports = {
+  port,
+  corsWhitelist: [
+    'http://localhost:4200',
+    'https://localhost:4200',
+    'http://localhost:4210',
+  ],
   rootPath,
   uploadPath: path.join(rootPath, 'public/uploads'),
   mongo: {
-    db: 'mongodb://localhost/shop13',
+    db: dbUrl,
     options: {useNewUrlParser: true},
   },
   facebook: {

@@ -7,13 +7,9 @@ const users = require('./app/users');
 const config = require('./config');
 const app = express();
 
-const port = 8000;
-
-const whitelist = ['http://localhost:4200', 'https://localhost:4200'];
-
 const corsOptions = {
-  origin: (origin, callback) => { // 'http://localhost:4200'
-    if (origin === undefined || whitelist.indexOf(origin) !== -1) {
+  origin: (origin, callback) => {
+    if (origin === undefined || config.corsWhitelist.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
@@ -31,8 +27,8 @@ app.use('/users', users);
 const run = async () => {
   await mongoose.connect(config.mongo.db, config.mongo.options);
 
-  app.listen(port, () => {
-    console.log(`Server started on ${port} port!`);
+  app.listen(config.port, () => {
+    console.log(`Server started on ${config.port} port!`);
   });
 
   process.on('exit', () => {
