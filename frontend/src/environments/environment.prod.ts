@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://157.230.28.244:8000',
+  apiUrl: 'https://shopjs13.ddnsfree.com/api',
   fbAppId: '718422199316941',
 };

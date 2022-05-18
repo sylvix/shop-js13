@@ -17,7 +17,9 @@ module.exports = {
     'https://localhost:4200',
     'http://localhost:4210',
     'http://157.230.28.244',
-    'https://157.230.28.244'
+    'https://157.230.28.244',
+    'http://shopjs13.ddnsfree.com',
+    'https://shopjs13.ddnsfree.com',
   ],
   rootPath,
   uploadPath: path.join(rootPath, 'public/uploads'),
