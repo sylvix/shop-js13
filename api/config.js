@@ -16,6 +16,8 @@ module.exports = {
     'http://localhost:4200',
     'https://localhost:4200',
     'http://localhost:4210',
+    'http://157.230.28.244',
+    'https://157.230.28.244'
   ],
   rootPath,
   uploadPath: path.join(rootPath, 'public/uploads'),
